@@ -43,6 +43,7 @@ SCRIPT_FILES+=gitflow-common
 SCRIPT_FILES+=gitflow-shFlags
 
 # TODO setup dynamic naming ?
+PREFIX_FILES=git-flow-prefix
 
 all:
 	@echo "usage: make install"
@@ -53,6 +54,7 @@ install:
 	install -d -m 0755 $(prefix)/bin
 	install -m 0755 $(EXEC_FILES) $(prefix)/bin
 	install -m 0644 $(SCRIPT_FILES) $(prefix)/bin
+	install -m 0644 $(PREFIX_FILES) $(prefix)/bin
 	@echo "Run 'git doflow version' to check the installation"
 
 uninstall:

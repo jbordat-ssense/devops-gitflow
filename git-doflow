@@ -49,11 +49,13 @@ fi
 # This helps our Windows users, while not bothering our Unix users.
 export GITFLOW_DIR=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
 
+export COMMAND_PREFIX=$(cat $GITFLOW_DIR/git-flow-prefix)
+
 usage() {
-  echo "git doflow tool is a dedicated SSENSE tool to apply specific GitFlow to DevOps"
+  echo "git ${COMMAND_PREFIX}flow tool is a dedicated SSENSE tool to apply specific GitFlow to DevOps"
   echo "Froked from nvie/gitflow by Jean Bordat"
   echo
-  echo "usage: git doflow <subcommand>"
+  echo "usage: git ${COMMAND_PREFIX}flow <subcommand>"
   echo
   echo "Available subcommands are:"
   echo "   init      Initialize a new git repo with support for the branching model."
@@ -63,7 +65,7 @@ usage() {
   # echo "   support   Manage your support branches."
   echo "   version   Shows version information."
   echo
-  echo "Try 'git doflow <subcommand> help' for details."
+  echo "Try 'git ${COMMAND_PREFIX}flow <subcommand> help' for details."
 }
 
 main() {
@@ -82,7 +84,7 @@ main() {
 
   # use the shFlags project to parse the command line arguments
   . "$GITFLOW_DIR/gitflow-shFlags"
-  FLAGS_PARENT="git doflow"
+  FLAGS_PARENT="git ${COMMAND_PREFIX}flow"
 
   # allow user to request git action logging
   DEFINE_boolean show_commands false 'show actions taken (git commands)' g
@@ -101,7 +103,7 @@ main() {
 
   # run command
   . "$GITFLOW_DIR/git-flow-$SUBCOMMAND"
-  FLAGS_PARENT="git doflow $SUBCOMMAND"
+  FLAGS_PARENT="git ${COMMAND_PREFIX}flow $SUBCOMMAND"
 
   # test if the first argument is a flag (i.e. starts with '-')
   # in that case, we interpret this arg as a flag for the default

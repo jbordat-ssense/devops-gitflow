@@ -166,35 +166,35 @@ git_is_branch_merged_into() {
 
 # check if this repo has been inited for gitflow
 gitflow_has_master_configured() {
-  local master=$(git config --get gitdoflow.branch.master)
+  local master=$(git config --get git${COMMAND_PREFIX}flow.branch.master)
   [ "$master" != "" ] && git_local_branch_exists "$master"
 }
 
 gitflow_has_develop_configured() {
-  local develop=$(git config --get gitdoflow.branch.develop)
+  local develop=$(git config --get git${COMMAND_PREFIX}flow.branch.develop)
   [ "$develop" != "" ] && git_local_branch_exists "$develop"
 }
 
 gitflow_has_prefixes_configured() {
-  git config --get gitdoflow.prefix.feature >/dev/null 2>&1 && \
-    # git config --get gitdoflow.prefix.release >/dev/null 2>&1 && \
-    git config --get gitdoflow.prefix.hotfix >/dev/null 2>&1  && \
-    # git config --get gitdoflow.prefix.support >/dev/null 2>&1 && \
-    git config --get gitdoflow.prefix.versiontag >/dev/null 2>&1
+  git config --get git${COMMAND_PREFIX}flow.prefix.feature >/dev/null 2>&1 && \
+    # git config --get git${COMMAND_PREFIX}flow.prefix.release >/dev/null 2>&1 && \
+    git config --get git${COMMAND_PREFIX}flow.prefix.hotfix >/dev/null 2>&1  && \
+    # git config --get git${COMMAND_PREFIX}flow.prefix.support >/dev/null 2>&1 && \
+    git config --get git${COMMAND_PREFIX}flow.prefix.versiontag >/dev/null 2>&1
 }
 
 gitflow_is_initialized() {
   gitflow_has_master_configured && \
     gitflow_has_develop_configured && \
-    [ "$(git config --get gitdoflow.branch.master)" != "$(git config --get gitdoflow.branch.develop)" ] && \
+    [ "$(git config --get git${COMMAND_PREFIX}flow.branch.master)" != "$(git config --get git${COMMAND_PREFIX}flow.branch.develop)" ] && \
     gitflow_has_prefixes_configured
 }
 
 # loading settings that can be overridden using git config
 gitflow_load_settings() {
   export DOT_GIT_DIR=$(git rev-parse --git-dir 2>/dev/null)
-  export MASTER_BRANCH=$(git config --get gitdoflow.branch.master)
-  export DEVELOP_BRANCH=$(git config --get gitdoflow.branch.develop)
+  export MASTER_BRANCH=$(git config --get git${COMMAND_PREFIX}flow.branch.master)
+  export DEVELOP_BRANCH=$(git config --get git${COMMAND_PREFIX}flow.branch.develop)
   export ORIGIN=$(git config --get gitflow.origin || echo origin)
 }
 
@@ -259,7 +259,7 @@ require_git_repo() {
 
 require_gitflow_initialized() {
   if ! gitflow_is_initialized; then
-    die "fatal: Not a gitflow-enabled repo yet. Please run \"git doflow init\" first."
+    die "fatal: Not a gitflow-enabled repo yet. Please run \"git ${COMMAND_PREFIX}flow init\" first."
   fi
 }
 
