@@ -40,16 +40,16 @@ init() {
   require_git_repo
   require_gitflow_initialized
   gitflow_load_settings
-  VERSION_PREFIX=$(eval "echo `git config --get gitflow.prefix.versiontag`")
-  PREFIX=$(git config --get gitflow.prefix.hotfix)
+  VERSION_PREFIX=$(eval "echo `git config --get git${COMMAND_PREFIX}flow.prefix.versiontag`")
+  PREFIX=$(git config --get git${COMMAND_PREFIX}flow.prefix.hotfix)
 }
 
 usage() {
-  echo "usage: git flow hotfix [list] [-v]"
-  echo "       git flow hotfix start [-F] <version> [<base>]"
-  echo "       git flow hotfix finish [-Fsumpk] <version>"
-  echo "       git flow hotfix publish <version>"
-  echo "       git flow hotfix track <version>"
+  echo "usage: git ${COMMAND_PREFIX}flow hotfix [list] [-v]"
+  echo "       git ${COMMAND_PREFIX}flow hotfix start [-F] <version> [<base>]"
+  echo "       git ${COMMAND_PREFIX}flow hotfix finish [-Fsumpk] <version>"
+  echo "       git ${COMMAND_PREFIX}flow hotfix publish <version>"
+  echo "       git ${COMMAND_PREFIX}flow hotfix track <version>"
 }
 
 cmd_default() {
@@ -69,7 +69,7 @@ cmd_list() {
     warn ""
     warn "You can start a new hotfix branch:"
     warn ""
-    warn "    git flow hotfix start <version> [<base>]"
+    warn "    git ${COMMAND_PREFIX}flow hotfix start <version> [<base>]"
     warn ""
     exit 0
   fi
@@ -188,7 +188,7 @@ cmd_start() {
   echo "- Start committing your hot fixes"
   echo "- When done, run:"
   echo
-  echo "     git flow hotfix finish '$VERSION'"
+  echo "     git ${COMMAND_PREFIX}flow hotfix finish '$VERSION'"
   echo
 }
 
@@ -283,21 +283,21 @@ cmd_finish() {
     # TODO: What do we do now?
   fi
 
-  if noflag notag; then
-    # try to tag the release
-    # in case a previous attempt to finish this release branch has failed,
-    # but the tag was set successful, we skip it now
-    local tagname=$VERSION_PREFIX$VERSION
-    if ! git_tag_exists "$tagname"; then
-      local opts="-a"
-      flag sign && opts="$opts -s"
-      [ "$FLAGS_signingkey" != "" ] && opts="$opts -u '$FLAGS_signingkey'"
-      [ "$FLAGS_message" != "" ] && opts="$opts -m '$FLAGS_message'"
-      [ "$FLAGS_messagefile" != "" ] && opts="$opts -F '$FLAGS_messagefile'"
-      eval git_do tag $opts "$VERSION_PREFIX$VERSION" "$BRANCH" || \
-        die "Tagging failed. Please run finish again to retry."
-    fi
-  fi
+  # if noflag notag; then
+  #   # try to tag the release
+  #   # in case a previous attempt to finish this release branch has failed,
+  #   # but the tag was set successful, we skip it now
+  #   local tagname=$VERSION_PREFIX$VERSION
+  #   if ! git_tag_exists "$tagname"; then
+  #     local opts="-a"
+  #     flag sign && opts="$opts -s"
+  #     [ "$FLAGS_signingkey" != "" ] && opts="$opts -u '$FLAGS_signingkey'"
+  #     [ "$FLAGS_message" != "" ] && opts="$opts -m '$FLAGS_message'"
+  #     [ "$FLAGS_messagefile" != "" ] && opts="$opts -F '$FLAGS_messagefile'"
+  #     eval git_do tag $opts "$VERSION_PREFIX$VERSION" "$BRANCH" || \
+  #       die "Tagging failed. Please run finish again to retry."
+  #   fi
+  # fi
 
   # try to merge into develop
   # in case a previous attempt to finish this release branch has failed,
