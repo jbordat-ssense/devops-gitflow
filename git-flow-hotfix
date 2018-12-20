@@ -47,7 +47,7 @@ init() {
 usage() {
   echo "usage: git ${COMMAND_PREFIX}flow hotfix [list] [-v]"
   echo "       git ${COMMAND_PREFIX}flow hotfix start [-F] <version> [<base>]"
-  echo "       git ${COMMAND_PREFIX}flow hotfix finish [-Fsumpk] <version>"
+  echo "       git ${COMMAND_PREFIX}flow hotfix finish [-Fsumfpkt] <version>"
   echo "       git ${COMMAND_PREFIX}flow hotfix publish <version>"
   echo "       git ${COMMAND_PREFIX}flow hotfix track <version>"
 }
@@ -247,7 +247,7 @@ cmd_finish() {
   DEFINE_string messagefile "" "use the contents of the given file as tag message" f
   DEFINE_boolean push false "push to $ORIGIN after performing finish" p
   DEFINE_boolean keep false "keep branch after performing finish" k
-  DEFINE_boolean notag false "don't tag this release" n
+  DEFINE_boolean tag false "don't tag this release" t
   parse_args "$@"
   require_version_arg
 
@@ -283,21 +283,21 @@ cmd_finish() {
     # TODO: What do we do now?
   fi
 
-  # if noflag notag; then
-  #   # try to tag the release
-  #   # in case a previous attempt to finish this release branch has failed,
-  #   # but the tag was set successful, we skip it now
-  #   local tagname=$VERSION_PREFIX$VERSION
-  #   if ! git_tag_exists "$tagname"; then
-  #     local opts="-a"
-  #     flag sign && opts="$opts -s"
-  #     [ "$FLAGS_signingkey" != "" ] && opts="$opts -u '$FLAGS_signingkey'"
-  #     [ "$FLAGS_message" != "" ] && opts="$opts -m '$FLAGS_message'"
-  #     [ "$FLAGS_messagefile" != "" ] && opts="$opts -F '$FLAGS_messagefile'"
-  #     eval git_do tag $opts "$VERSION_PREFIX$VERSION" "$BRANCH" || \
-  #       die "Tagging failed. Please run finish again to retry."
-  #   fi
-  # fi
+  if flag tag; then
+    # try to tag the release
+    # in case a previous attempt to finish this release branch has failed,
+    # but the tag was set successful, we skip it now
+    local tagname=$VERSION_PREFIX$VERSION
+    if ! git_tag_exists "$tagname"; then
+      local opts="-a"
+      flag sign && opts="$opts -s"
+      [ "$FLAGS_signingkey" != "" ] && opts="$opts -u '$FLAGS_signingkey'"
+      [ "$FLAGS_message" != "" ] && opts="$opts -m '$FLAGS_message'"
+      [ "$FLAGS_messagefile" != "" ] && opts="$opts -F '$FLAGS_messagefile'"
+      eval git_do tag $opts "$VERSION_PREFIX$VERSION" "$BRANCH" || \
+        die "Tagging failed. Please run finish again to retry."
+    fi
+  fi
 
   # try to merge into develop
   # in case a previous attempt to finish this release branch has failed,
@@ -323,7 +323,7 @@ cmd_finish() {
       die "Could not push to $DEVELOP_BRANCH from $ORIGIN."
     git_do push "$ORIGIN" "$MASTER_BRANCH" || \
       die "Could not push to $MASTER_BRANCH from $ORIGIN."
-    if noflag notag; then
+    if flag tag; then
       git_do push --tags "$ORIGIN" || \
         die "Could not push tags to $ORIGIN."
     fi
@@ -333,7 +333,7 @@ cmd_finish() {
   echo "Summary of actions:"
   echo "- Latest objects have been fetched from '$ORIGIN'"
   echo "- Hotfix branch has been merged into '$MASTER_BRANCH'"
-  if noflag notag; then
+  if flag tag; then
     echo "- The hotfix was tagged '$VERSION_PREFIX$VERSION'"
   fi
   echo "- Hotfix branch has been back-merged into '$DEVELOP_BRANCH'"
