@@ -46,8 +46,18 @@ init() {
 
 usage() {
   echo "usage: git ${COMMAND_PREFIX}flow hotfix [list] [-v]"
+  echo "           -V : verbose (more) output"
   echo "       git ${COMMAND_PREFIX}flow hotfix start [-F] <version> [<base>]"
+  echo "           -F : fetch from <origin> before performing finish"
   echo "       git ${COMMAND_PREFIX}flow hotfix finish [-Fsumfpkt] <version>"
+  echo "           -F : fetch from <origin> before performing finish"
+  echo "           -s : sign the release tag cryptographically"
+  echo "           -u : use the given GPG-key for the digital signature (implies -s)"
+  echo "           -m : use the given tag message"
+  echo "           -f : use the contents of the given file as tag message"
+  echo "           -p : push to <origin> after performing finish"
+  echo "           -k : keep branch after performing finish"
+  echo "           -t : tag this release"
   echo "       git ${COMMAND_PREFIX}flow hotfix publish <version>"
   echo "       git ${COMMAND_PREFIX}flow hotfix track <version>"
 }

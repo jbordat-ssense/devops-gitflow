@@ -45,14 +45,23 @@ init() {
 
 usage() {
   echo "usage: git ${COMMAND_PREFIX}flow feature [list] [-v]"
+  echo "           -V  : verbose (more) output"
   echo "       git ${COMMAND_PREFIX}flow feature start [-F] <name> [<base>]"
+  echo "           -F : fetch from $ORIGIN before performing finish"
   echo "       git ${COMMAND_PREFIX}flow feature finish [-rFkDS] [<name|nameprefix>]"
+  echo "           -F : fetch from $ORIGIN before performing finish"
+  echo "           -r : rebase instead of merge"
+  echo "           -k : keep branch after performing finish"
+  echo "           -D : force delete feature branch after finish"
+  echo "           -S : squash feature during merge"
   echo "       git ${COMMAND_PREFIX}flow feature publish <name>"
   echo "       git ${COMMAND_PREFIX}flow feature track <name>"
   echo "       git ${COMMAND_PREFIX}flow feature diff [<name|nameprefix>]"
   echo "       git ${COMMAND_PREFIX}flow feature rebase [-i] [<name|nameprefix>]"
+  echo "           -i : do an interactive rebase"
   echo "       git ${COMMAND_PREFIX}flow feature checkout [<name|nameprefix>]"
   echo "       git ${COMMAND_PREFIX}flow feature pull [-r] <remote> [<name>]"
+  echo "           -r : pull with rebase"
 }
 
 cmd_default() {
