@@ -38,6 +38,8 @@
 
 usage() {
   echo "usage: git ${COMMAND_PREFIX}flow init [-fd]"
+  echo "           -f : force setting of gitflow branches, even if already configured"
+  echo "           -d : use default branch naming conventions"
 }
 
 parse_args() {
