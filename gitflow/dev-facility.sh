@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/jbordat/Documents/Projects/devops-gitflow
+cd /home/jbordat/Documents/Projects/devops-gitflow/gitflow
 
 echo "use it as root : 'sudo /bin/bash ./dev-facility'"
 
