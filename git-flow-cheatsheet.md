@@ -9,7 +9,7 @@ git flow init [-fd]
 ### feature
 ###### Manage your feature branches.
 ```shell
-git doflow feature [list] [-v]
+git flow feature [list] [-v]
   -V : verbose (more) output
 git doflow feature start [-F] <name> [<base>]
   -F : fetch from $ORIGIN before performing finish
