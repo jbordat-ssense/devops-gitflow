@@ -233,7 +233,7 @@ cmd_default() {
   # finally, ask the user for naming conventions (branch and tag prefixes)
   if flag force || \
     ! git config --get git${COMMAND_PREFIX}flow.prefix.feature >/dev/null 2>&1 ||
-  # ! git config --get git${COMMAND_PREFIX}flow.prefix.release >/dev/null 2>&1 ||
+  ! git config --get git${COMMAND_PREFIX}flow.prefix.release >/dev/null 2>&1 ||
   ! git config --get git${COMMAND_PREFIX}flow.prefix.hotfix >/dev/null 2>&1 ||
   # ! git config --get git${COMMAND_PREFIX}flow.prefix.support >/dev/null 2>&1 ||
   ! git config --get git${COMMAND_PREFIX}flow.prefix.versiontag >/dev/null 2>&1; then
@@ -256,18 +256,18 @@ cmd_default() {
     git_do config git${COMMAND_PREFIX}flow.prefix.feature "$prefix"
   fi
 
-  # # Release branches
-  # if ! git config --get git${COMMAND_PREFIX}flow.prefix.release >/dev/null 2>&1 || flag force; then
-  # 	default_suggestion=$(git config --get git${COMMAND_PREFIX}flow.prefix.release || echo release/)
-  # 	printf "Release branches? [$default_suggestion] "
-  # 	if noflag defaults; then
-  # 		read answer
-  # 	else
-  # 		printf "\n"
-  # 	fi
-  # 	[ "$answer" = "-" ] && prefix= || prefix=${answer:-$default_suggestion}
-  # 	git_do config git${COMMAND_PREFIX}flow.prefix.release "$prefix"
-  # fi
+  # Release branches
+  if ! git config --get git${COMMAND_PREFIX}flow.prefix.release >/dev/null 2>&1 || flag force; then
+    default_suggestion=$(git config --get git${COMMAND_PREFIX}flow.prefix.release || echo release/)
+    printf "Release branches? [$default_suggestion] "
+    if noflag defaults; then
+      read answer
+    else
+      printf "\n"
+    fi
+    [ "$answer" = "-" ] && prefix= || prefix=${answer:-$default_suggestion}
+    git_do config git${COMMAND_PREFIX}flow.prefix.release "$prefix"
+  fi
 
 
   # Hotfix branches

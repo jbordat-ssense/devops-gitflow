@@ -62,14 +62,14 @@ git flow release [list] [-v]
   -v : verbose (more) output
 git flow release start [-F] <version>
   -F : fetch from <origin> before performing finish
-git flow release finish [-Fsumpk] <version>
+git flow release finish [-Fsumpkt] <version>
   -F : fetch from <origin> before performing finish
   -s : sign the release tag cryptographically
   -u : use the given GPG-key for the digital signature (implies -s)
   -m : use the given tag message
   -p : push to <origin> after performing finish
   -k : keep branch after performing finish
-  -n : tag this release
+  -t : tag this release
 git flow release publish <name>
 git flow release track <name>
 ```
