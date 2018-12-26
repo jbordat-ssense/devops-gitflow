@@ -1,0 +1,37 @@
+# git coflow init
+alias g-cof-i='git coflow init'
+
+# git coflow feature
+alias g-cof-f='git coflow feature'
+alias g-cof-fs='git coflow feature start'
+alias g-cof-ff='git coflow feature finish'
+alias g-cof-fp='git coflow feature publish'
+alias g-cof-ft='git coflow feature track'
+alias g-cof-fd='git coflow feature diff'
+alias g-cof-fr='git coflow feature rebase'
+alias g-cof-fc='git coflow feature checkout'
+alias g-cof-fp='git coflow feature pull'
+
+# git coflow hotfix
+alias g-cof-h='git coflow hotfix'
+alias g-cof-hs='git coflow hotfix start'
+alias g-cof-hf='git coflow hotfix finish'
+alias g-cof-hp='git coflow hotfix publish'
+alias g-cof-ht='git coflow hotfix track'
+
+# git coflow version
+alias g-cof-v='git coflow version'
+
+# git coflow release
+alias g-cof-r='git coflow release'
+alias g-cof-rs='git coflow release start'
+alias g-cof-rf='git coflow release finish'
+alias g-cof-rp='git coflow release publish'
+alias g-cof-rt='git coflow release track'
+
+# git coflow start and finish shortcut
+function gitcoflowreleasequick() {
+  git coflow release start "$2"
+  git coflow release finish "$@"
+}
+alias g-cof-rq='gitcoflowreleasequick'
