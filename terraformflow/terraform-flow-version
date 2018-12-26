@@ -1,0 +1,27 @@
+#
+#           ╦╔╗   ┌─┐  ╔═╗╔═╗╔═╗╔╗╔╔═╗╔═╗
+#           ║╠╩╗  │└┘  ╚═╗╚═╗║╣ ║║║╚═╗║╣
+#          ╚╝╚═╝  └──  ╚═╝╚═╝╚═╝╝╚╝╚═╝╚═╝
+#
+# Author:  Jean Bordat <jean.bordat@ssense.com>
+# Date:    2018-12-26
+#
+# Summary: Version script
+# Version: 0.1
+#
+
+
+GITFLOW_VERSION=0.1-ssense
+
+usage() {
+  echo "usage: terraform flow version"
+}
+
+cmd_default() {
+  echo "$GITFLOW_VERSION"
+}
+
+cmd_help() {
+  usage
+  exit 0
+}

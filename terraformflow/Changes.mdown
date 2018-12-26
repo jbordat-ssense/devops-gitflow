@@ -1,0 +1,6 @@
+0.1:
+-----
+Release date: **not yet**
+
+* `terraform flow init` now detects situations where origin already has gitflow
+  branches set up, and behaves accordingly (thanks Emre Berge Ergenekon).

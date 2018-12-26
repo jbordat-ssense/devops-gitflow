@@ -1,0 +1,98 @@
+#!/bin/sh
+
+#
+#           ╦╔╗   ┌─┐  ╔═╗╔═╗╔═╗╔╗╔╔═╗╔═╗
+#           ║╠╩╗  │└┘  ╚═╗╚═╗║╣ ║║║╚═╗║╣
+#          ╚╝╚═╝  └──  ╚═╝╚═╝╚═╝╝╚╝╚═╝╚═╝
+#
+# Author:  Jean Bordat <jean.bordat@ssense.com>
+# Date:    2018-12-26
+#
+# Summary: Terraform flow entry point
+# Version: 0.1
+#
+
+
+# set this to workaround expr problems in shFlags on freebsd
+if uname -s | egrep -iq 'bsd'; then export EXPR_COMPAT=1; fi
+
+# enable debug mode
+if [ "$DEBUG" = "yes" ]; then
+  set -x
+fi
+
+# The sed expression here replaces all backslashes by forward slashes.
+# This helps our Windows users, while not bothering our Unix users.
+export TFFLOW_DIR=$(dirname "$(echo "$0" | sed -e 's,\\,/,g')")
+
+usage() {
+  echo "terraform flow tool is a dedicated SSENSE tool to apply specific TerraformFlow to DevOps"
+  echo "Written by Jean Bordat"
+  echo
+  echo "usage: terraform flow <subcommand>"
+  echo
+  echo "Available subcommands are:"
+  echo "   init      Initialize a new terraform repo with support for the branching model."
+  echo "   version   Shows version information."
+  echo
+  echo "Try 'terraform flow <subcommand> help' for details."
+}
+
+main() {
+  if [ $# -lt 1 ]; then
+    usage
+    exit 1
+  fi
+
+  # load common functionality
+  . "$TFFLOW_DIR/terraformflow-common"
+
+  # This environmental variable fixes non-POSIX getopt style argument
+  # parsing, effectively breaking terraform-flow subcommand parsing on several
+  # Linux platforms.
+  export POSIXLY_CORRECT=1
+
+  # use the shFlags project to parse the command line arguments
+  . "$TFFLOW_DIR/terraformflow-shFlags"
+  FLAGS_PARENT="terraform flow"
+
+  # allow user to request terraform action logging
+  DEFINE_boolean show_commands false 'show actions taken (terraform commands)' g
+
+  # do actual parsing
+  FLAGS "$@" || exit $?
+  eval set -- "${FLAGS_ARGV}"
+
+  # sanity checks
+  SUBCOMMAND="$1"; shift
+
+  if [ ! -e "$TFFLOW_DIR/terraform-flow-$SUBCOMMAND" ]; then
+    usage
+    exit 1
+  fi
+
+  # run command
+  . "$TFFLOW_DIR/terraform-flow-$SUBCOMMAND"
+  FLAGS_PARENT="terraform flow $SUBCOMMAND"
+
+  # test if the first argument is a flag (i.e. starts with '-')
+  # in that case, we interpret this arg as a flag for the default
+  # command
+  SUBACTION="default"
+  if [ "$1" != "" ] && { ! echo "$1" | grep -q "^-"; } then
+    SUBACTION="$1"; shift
+  fi
+  if ! type "cmd_$SUBACTION" >/dev/null 2>&1; then
+    warn "Unknown subcommand: '$SUBACTION'"
+    usage
+    exit 1
+  fi
+
+  # run the specified action
+  if [ $SUBACTION != "help" ] && [ $SUBCOMMAND != "init" ] ; then
+    init
+  fi
+  cmd_$SUBACTION "$@"
+}
+
+main "$@"
