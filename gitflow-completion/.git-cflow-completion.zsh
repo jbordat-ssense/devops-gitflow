@@ -3,7 +3,7 @@
 # Installation
 # ------------
 #
-# To achieve git-${COMMAND_PREFIX}flow completion nirvana:
+# To achieve git-cflow completion nirvana:
 #
 #  0. Update your zsh's git-completion module to the newest verion.
 #     From here. http://zsh.git.sourceforge.net/git/gitweb.cgi?p=zsh/zsh;a=blob_plain;f=Completion/Unix/Command/_git;hb=HEAD
@@ -12,17 +12,15 @@
 #
 #     a. Place it in your .zshrc:
 #
-#     b. Or, copy it somewhere (e.g. ~/.git-${COMMAND_PREFIX}flow-completion.zsh) and put the following line in
+#     b. Or, copy it somewhere (e.g. ~/.git-cflow-completion.zsh) and put the following line in
 #        your .zshrc:
 #
-#            source ~/.git-${COMMAND_PREFIX}flow-completion.zsh
+#            source ~/.git-cflow-completion.zsh
 #
 #     c. Or, use this file as a oh-my-zsh plugin.
 #
 
-COMMAND_PREFIX=do
-
-_git-${COMMAND_PREFIX}flow ()
+_git-cflow ()
 {
 	local curcontext="$curcontext" state line
 	typeset -A opt_args
@@ -43,7 +41,7 @@ _git-${COMMAND_PREFIX}flow ()
 				'support:Manage your support branches.'
 				'version:Shows version information.'
 			)
-			_describe -t commands 'git ${COMMAND_PREFIX}flow' subcommands
+			_describe -t commands 'git cflow' subcommands
 		;;
 
 		(options)
@@ -51,29 +49,29 @@ _git-${COMMAND_PREFIX}flow ()
 
 				(init)
 					_arguments \
-						-f'[Force setting of git${COMMAND_PREFIX}flow branches, even if already configured]'
+						-f'[Force setting of gitcflow branches, even if already configured]'
 					;;
 
 					(version)
 					;;
 
 					(hotfix)
-						__git-${COMMAND_PREFIX}flow-hotfix
+						__git-cflow-hotfix
 					;;
 
 					(release)
-						__git-${COMMAND_PREFIX}flow-release
+						__git-cflow-release
 					;;
 
 					(feature)
-						__git-${COMMAND_PREFIX}flow-feature
+						__git-cflow-feature
 					;;
 			esac
 		;;
 	esac
 }
 
-__git-${COMMAND_PREFIX}flow-release ()
+__git-cflow-release ()
 {
 	local curcontext="$curcontext" state line
 	typeset -A opt_args
@@ -89,11 +87,11 @@ __git-${COMMAND_PREFIX}flow-release ()
 			subcommands=(
 				'start:Start a new release branch.'
 				'finish:Finish a release branch.'
-				'list:List all your release branches. (Alias to `git ${COMMAND_PREFIX}flow release`)'
+				'list:List all your release branches. (Alias to `git cflow release`)'
 				'publish:Publish release branch to remote.'
 				'track:Checkout remote release branch.'
 			)
-			_describe -t commands 'git ${COMMAND_PREFIX}flow release' subcommands
+			_describe -t commands 'git cflow release' subcommands
 			_arguments \
 				-v'[Verbose (more) output]'
 		;;
@@ -104,7 +102,7 @@ __git-${COMMAND_PREFIX}flow-release ()
 				(start)
 					_arguments \
 						-F'[Fetch from origin before performing finish]'\
-						':version:__git_${COMMAND_PREFIX}flow_version_list'
+						':version:__git_cflow_version_list'
 				;;
 
 				(finish)
@@ -114,17 +112,19 @@ __git-${COMMAND_PREFIX}flow-release ()
 						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
 						-m'[Use the given tag message]'\
 						-p'[Push to $ORIGIN after performing finish]'\
-						':version:__git_${COMMAND_PREFIX}flow_version_list'
+						-k'[keep branch after performing finish]'\
+						-t'[tag this release]'\
+						':version:__git_cflow_version_list'
 				;;
 
 				(publish)
 					_arguments \
-						':version:__git_${COMMAND_PREFIX}flow_version_list'
+						':version:__git_cflow_version_list'
 				;;
 
 				(track)
 					_arguments \
-						':version:__git_${COMMAND_PREFIX}flow_version_list'
+						':version:__git_cflow_version_list'
 				;;
 
 				*)
@@ -136,7 +136,7 @@ __git-${COMMAND_PREFIX}flow-release ()
 	esac
 }
 
-__git-${COMMAND_PREFIX}flow-hotfix ()
+__git-cflow-hotfix ()
 {
 	local curcontext="$curcontext" state line
 	typeset -A opt_args
@@ -152,9 +152,9 @@ __git-${COMMAND_PREFIX}flow-hotfix ()
 			subcommands=(
 				'start:Start a new hotfix branch.'
 				'finish:Finish a hotfix branch.'
-				'list:List all your hotfix branches. (Alias to `git ${COMMAND_PREFIX}flow hotfix`)'
+				'list:List all your hotfix branches. (Alias to `git cflow hotfix`)'
 			)
-			_describe -t commands 'git ${COMMAND_PREFIX}flow hotfix' subcommands
+			_describe -t commands 'git cflow hotfix' subcommands
 			_arguments \
 				-v'[Verbose (more) output]'
 		;;
@@ -165,7 +165,7 @@ __git-${COMMAND_PREFIX}flow-hotfix ()
 				(start)
 					_arguments \
 						-F'[Fetch from origin before performing finish]'\
-						':hotfix:__git_${COMMAND_PREFIX}flow_version_list'\
+						':hotfix:__git_cflow_version_list'\
 						':branch-name:__git_branch_names'
 				;;
 
@@ -175,8 +175,11 @@ __git-${COMMAND_PREFIX}flow-hotfix ()
 						-s'[Sign the release tag cryptographically]'\
 						-u'[Use the given GPG-key for the digital signature (implies -s)]'\
 						-m'[Use the given tag message]'\
+						-f'[use the contents of the given file as tag message]'\
 						-p'[Push to $ORIGIN after performing finish]'\
-						':hotfix:__git_${COMMAND_PREFIX}flow_hotfix_list'
+						-k'[keep branch after performing finish]'\
+						-t'[tag this release]'\
+						':hotfix:__git_cflow_hotfix_list'
 				;;
 
 				*)
@@ -188,7 +191,7 @@ __git-${COMMAND_PREFIX}flow-hotfix ()
 	esac
 }
 
-__git-${COMMAND_PREFIX}flow-feature ()
+__git-cflow-feature ()
 {
 	local curcontext="$curcontext" state line
 	typeset -A opt_args
@@ -204,7 +207,7 @@ __git-${COMMAND_PREFIX}flow-feature ()
 			subcommands=(
 				'start:Start a new feature branch.'
 				'finish:Finish a feature branch.'
-				'list:List all your feature branches. (Alias to `git ${COMMAND_PREFIX}flow feature`)'
+				'list:List all your feature branches. (Alias to `git cflow feature`)'
 				'publish:Publish feature branch to remote.'
 				'track:Checkout remote feature branch.'
 				'diff:Show all changes.'
@@ -212,7 +215,7 @@ __git-${COMMAND_PREFIX}flow-feature ()
 				'checkout:Checkout local feature branch.'
 				'pull:Pull changes from remote.'
 			)
-			_describe -t commands 'git ${COMMAND_PREFIX}flow feature' subcommands
+			_describe -t commands 'git cflow feature' subcommands
 			_arguments \
 				-v'[Verbose (more) output]'
 		;;
@@ -223,7 +226,7 @@ __git-${COMMAND_PREFIX}flow-feature ()
 				(start)
 					_arguments \
 						-F'[Fetch from origin before performing finish]'\
-						':feature:__git_${COMMAND_PREFIX}flow_feature_list'\
+						':feature:__git_cflow_feature_list'\
 						':branch-name:__git_branch_names'
 				;;
 
@@ -231,17 +234,20 @@ __git-${COMMAND_PREFIX}flow-feature ()
 					_arguments \
 						-F'[Fetch from origin before performing finish]' \
 						-r'[Rebase instead of merge]'\
-						':feature:__git_${COMMAND_PREFIX}flow_feature_list'
+						-k'[keep branch after performing finish]'\
+						-D'[force delete feature branch after finish]'\
+						-S'[squash feature during merge]'\
+						':feature:__git_cflow_feature_list'
 				;;
 
 				(publish)
 					_arguments \
-						':feature:__git_${COMMAND_PREFIX}flow_feature_list'\
+						':feature:__git_cflow_feature_list'\
 				;;
 
 				(track)
 					_arguments \
-						':feature:__git_${COMMAND_PREFIX}flow_feature_list'\
+						':feature:__git_cflow_feature_list'\
 				;;
 
 				(diff)
@@ -257,7 +263,7 @@ __git-${COMMAND_PREFIX}flow-feature ()
 
 				(checkout)
 					_arguments \
-						':branch:__git_${COMMAND_PREFIX}flow_feature_list'\
+						':branch:__git_cflow_feature_list'\
 				;;
 
 				(pull)
@@ -275,23 +281,23 @@ __git-${COMMAND_PREFIX}flow-feature ()
 	esac
 }
 
-__git_${COMMAND_PREFIX}flow_version_list ()
+__git_cflow_version_list ()
 {
 	local expl
 	declare -a versions
 
-	versions=(${${(f)"$(_call_program versions git ${COMMAND_PREFIX}flow release list 2> /dev/null | tr -d ' |*')"}})
+	versions=(${${(f)"$(_call_program versions git cflow release list 2> /dev/null | tr -d ' |*')"}})
 	__git_command_successful || return
 
 	_wanted versions expl 'version' compadd $versions
 }
 
-__git_${COMMAND_PREFIX}flow_feature_list ()
+__git_cflow_feature_list ()
 {
 	local expl
 	declare -a features
 
-	features=(${${(f)"$(_call_program features git ${COMMAND_PREFIX}flow feature list 2> /dev/null | tr -d ' |*')"}})
+	features=(${${(f)"$(_call_program features git cflow feature list 2> /dev/null | tr -d ' |*')"}})
 	__git_command_successful || return
 
 	_wanted features expl 'feature' compadd $features
@@ -314,12 +320,12 @@ __git_remotes () {
 	fi
 }
 
-__git_${COMMAND_PREFIX}flow_hotfix_list ()
+__git_cflow_hotfix_list ()
 {
 	local expl
 	declare -a hotfixes
 
-	hotfixes=(${${(f)"$(_call_program hotfixes git ${COMMAND_PREFIX}flow hotfix list 2> /dev/null | tr -d ' |*')"}})
+	hotfixes=(${${(f)"$(_call_program hotfixes git cflow hotfix list 2> /dev/null | tr -d ' |*')"}})
 	__git_command_successful || return
 
 	_wanted hotfixes expl 'hotfix' compadd $hotfixes
@@ -343,4 +349,7 @@ __git_command_successful () {
 	return 0
 }
 
-zstyle ':completion:*:*:git:*' user-commands ${COMMAND_PREFIX}flow:'provide high-level repository operations'
+zstyle -g existing_user_commands ':completion:*:*:git:*' user-commands
+
+zstyle ':completion:*:*:git:*' user-commands $existing_user_commands \
+    cflow:"custom provider <cflow> - high-level repository operations"

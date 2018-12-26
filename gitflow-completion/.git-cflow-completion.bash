@@ -1,13 +1,13 @@
 #!bash
 #
-# git-doflow-completion
+# git-flow-completion
 # ===================
 #
-# Bash completion support for [git-doflow](http://github.com/nvie/gitdoflow)
+# Bash completion support for [git-flow](http://github.com/nvie/gitflow)
 #
 # The contained completion routines provide support for completing:
 #
-#  * git-doflow init and version
+#  * git-flow init and version
 #  * feature, hotfix and release branches
 #  * remote feature, hotfix and release branch names
 #
@@ -15,7 +15,7 @@
 # Installation
 # ------------
 #
-# To achieve git-doflow completion nirvana:
+# To achieve git-flow completion nirvana:
 #
 #  0. Install git-completion.
 #
@@ -27,15 +27,15 @@
 #        * /usr/local/etc/bash-completion.d
 #        * ~/bash-completion.d
 #
-#     b. Or, copy it somewhere (e.g. ~/.git-doflow-completion.sh) and put the following line in
+#     b. Or, copy it somewhere (e.g. ~/.git-flow-completion.sh) and put the following line in
 #        your .bashrc:
 #
-#            source ~/.git-doflow-completion.sh
+#            source ~/.git-flow-completion.sh
 #
 #  2. If you are using Git < 1.7.1: Edit git-completion.sh and add the following line to the giant
 #     $command case in _git:
 #
-#         doflow)        _git_doflow ;;
+#         flow)        _git_flow ;;
 #
 #
 # The Fine Print
@@ -45,7 +45,7 @@
 #
 # Distributed under the [MIT License](http://creativecommons.org/licenses/MIT/)
 
-_git_doflow ()
+_git_flow ()
 {
 	local subcommands="init feature release hotfix support help version"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
@@ -56,23 +56,23 @@ _git_doflow ()
 
 	case "$subcommand" in
 	init)
-		__git_doflow_init
+		__git_flow_init
 		return
 		;;
 	feature)
-		__git_doflow_feature
+		__git_flow_feature
 		return
 		;;
 	release)
-		__git_doflow_release
+		__git_flow_release
 		return
 		;;
 	hotfix)
-		__git_doflow_hotfix
+		__git_flow_hotfix
 		return
 		;;
 	support)
-		__git_doflow_support
+		__git_flow_support
 		return
 		;;
 	*)
@@ -81,7 +81,7 @@ _git_doflow ()
 	esac
 }
 
-__git_doflow_init ()
+__git_flow_init ()
 {
 	local subcommands="help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
@@ -91,7 +91,7 @@ __git_doflow_init ()
 	fi
 }
 
-__git_doflow_feature ()
+__git_flow_feature ()
 {
 	local subcommands="list start finish publish track diff rebase checkout pull help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
@@ -106,15 +106,15 @@ __git_doflow_feature ()
 		return
 		;;
 	checkout|finish|diff|rebase)
-		__gitcomp "$(__git_doflow_list_branches 'feature')"
+		__gitcomp "$(__git_flow_list_branches 'feature')"
 		return
 		;;
 	publish)
-		__gitcomp "$(comm -23 <(__git_doflow_list_branches 'feature') <(__git_doflow_list_remote_branches 'feature'))"
+		__gitcomp "$(comm -23 <(__git_flow_list_branches 'feature') <(__git_flow_list_remote_branches 'feature'))"
 		return
 		;;
 	track)
-		__gitcomp "$(comm -23 <(__git_doflow_list_remote_branches 'feature') <(__git_doflow_list_branches 'feature'))"
+		__gitcomp "$(comm -23 <(__git_flow_list_remote_branches 'feature') <(__git_flow_list_branches 'feature'))"
 		return
 		;;
 	*)
@@ -123,7 +123,7 @@ __git_doflow_feature ()
 	esac
 }
 
-__git_doflow_release ()
+__git_flow_release ()
 {
 	local subcommands="list start finish track publish help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
@@ -134,15 +134,15 @@ __git_doflow_release ()
 
 	case "$subcommand" in
 	finish)
-		__gitcomp "$(__git_doflow_list_branches 'release')"
+		__gitcomp "$(__git_flow_list_branches 'release')"
 		return
 		;;
 	publish)
-		__gitcomp "$(comm -23 <(__git_doflow_list_branches 'release') <(__git_doflow_list_remote_branches 'release'))"
+		__gitcomp "$(comm -23 <(__git_flow_list_branches 'release') <(__git_flow_list_remote_branches 'release'))"
 		return
 		;;
 	track)
-		__gitcomp "$(comm -23 <(__git_doflow_list_remote_branches 'release') <(__git_doflow_list_branches 'release'))"
+		__gitcomp "$(comm -23 <(__git_flow_list_remote_branches 'release') <(__git_flow_list_branches 'release'))"
 		return
 		;;
 	*)
@@ -152,7 +152,7 @@ __git_doflow_release ()
 
 }
 
-__git_doflow_hotfix ()
+__git_flow_hotfix ()
 {
 	local subcommands="list start finish track publish help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
@@ -163,15 +163,15 @@ __git_doflow_hotfix ()
 
 	case "$subcommand" in
 	finish)
-		__gitcomp "$(__git_doflow_list_branches 'hotfix')"
+		__gitcomp "$(__git_flow_list_branches 'hotfix')"
 		return
 		;;
 	publish)
-		__gitcomp "$(comm -23 <(__git_doflow_list_branches 'hotfix') <(__git_doflow_list_remote_branches 'hotfix'))"
+		__gitcomp "$(comm -23 <(__git_flow_list_branches 'hotfix') <(__git_flow_list_remote_branches 'hotfix'))"
 		return
 		;;
 	track)
-		__gitcomp "$(comm -23 <(__git_doflow_list_remote_branches 'hotfix') <(__git_doflow_list_branches 'hotfix'))"
+		__gitcomp "$(comm -23 <(__git_flow_list_remote_branches 'hotfix') <(__git_flow_list_branches 'hotfix'))"
 		return
 		;;
 	*)
@@ -180,7 +180,7 @@ __git_doflow_hotfix ()
 	esac
 }
 
-__git_doflow_support ()
+__git_flow_support ()
 {
 	local subcommands="list start help"
 	local subcommand="$(__git_find_on_cmdline "$subcommands")"
@@ -196,26 +196,26 @@ __git_doflow_support ()
 	esac
 }
 
-__git_doflow_prefix ()
+__git_flow_prefix ()
 {
 	case "$1" in
 	feature|release|hotfix)
-		git config "gitdoflow.prefix.$1" 2> /dev/null || echo "$1/"
+		git config "gitflow.prefix.$1" 2> /dev/null || echo "$1/"
 		return
 		;;
 	esac
 }
 
-__git_doflow_list_branches ()
+__git_flow_list_branches ()
 {
-	local prefix="$(__git_doflow_prefix $1)"
+	local prefix="$(__git_flow_prefix $1)"
 	git branch --no-color 2> /dev/null | tr -d ' |*' | grep --color=never "^$prefix" | sed s,^$prefix,, | sort
 }
 
-__git_doflow_list_remote_branches ()
+__git_flow_list_remote_branches ()
 {
-	local prefix="$(__git_doflow_prefix $1)"
-	local origin="$(git config gitdoflow.origin 2> /dev/null || echo "origin")"
+	local prefix="$(__git_flow_prefix $1)"
+	local origin="$(git config gitflow.origin 2> /dev/null || echo "origin")"
 	git branch --no-color -r 2> /dev/null | sed "s/^ *//g" | grep --color=never "^$origin/$prefix" | sed s,^$origin/$prefix,, | sort
 }
 
