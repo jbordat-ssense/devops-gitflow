@@ -1,1 +1,37 @@
-alias halllu='pwd'
+# git doflow init
+alias g-df-i='git doflow init'
+
+# git doflow feature
+alias g-df-f='git doflow feature'
+alias g-df-fs='git doflow feature start'
+alias g-df-ff='git doflow feature finish'
+alias g-df-fp='git doflow feature publish'
+alias g-df-ft='git doflow feature track'
+alias g-df-fd='git doflow feature diff'
+alias g-df-fr='git doflow feature rebase'
+alias g-df-fc='git doflow feature checkout'
+alias g-df-fp='git doflow feature pull'
+
+# git doflow hotfix
+alias g-df-h='git doflow hotfix'
+alias g-df-hs='git doflow hotfix start'
+alias g-df-hf='git doflow hotfix finish'
+alias g-df-hp='git doflow hotfix publish'
+alias g-df-ht='git doflow hotfix track'
+
+# git doflow version
+alias g-df-v='git doflow version'
+
+# git doflow release
+alias g-df-r='git doflow release'
+alias g-df-rs='git doflow release start'
+alias g-df-rf='git doflow release finish'
+alias g-df-rp='git doflow release publish'
+alias g-df-rt='git doflow release track'
+
+# git doflow start and finish shortcut
+function gitdoflowreleasequick() {
+  git doflow release start "$2"
+  git doflow release finish "$@"
+}
+alias g-df-rq='gitdoflowreleasequick'
