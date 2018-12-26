@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/jbordat/Documents/Projects/devops-gitflow/bashrc
+cd /home/jbordat/Documents/Projects/devops-gitflow/gitflow-completion
 
 echo "use it : '/bin/bash ./dev-facility'"
 
